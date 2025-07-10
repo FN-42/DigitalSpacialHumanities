@@ -19,24 +19,12 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-// Fetch the accident data and add to the map
-window.fetch("unfall.geojson")
-  .then(response => response.json())
-  .then(json => {
-    L.geoJSON(json, {
-      onEachFeature: function (feature, layer) {
-        let p = feature.properties;
-        layer.bindPopup(
-          "<b>Jahr:</b> " + p.UJAHR +
-          "<br><b>Monat:</b> " + p.UMONAT +
-          "<br><b>Stunde:</b> " + p.USTUNDE +
-          "<br><b>Kategorie:</b> " + p.UKATEGORIE +
-          "<br><b>Art:</b> " + p.UART +
-          "<br><b>Typ:</b> " + p.UTYP1
-        );
-      }
-    }).addTo(map);
-  });
+window.fetch("map(1).geojson").then((response) => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();
+  }).then((json) => L.geoJSON(json).addTo(map))
 </script>
 </body>
 </html>
